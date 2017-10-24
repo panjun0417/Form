@@ -140,10 +140,25 @@
         CGFloat height = 0.0f;
 
         if (fields.count > 0) {
-            NSIndexPath *lastIndexPath = [NSIndexPath indexPathForItem:fields.count - 1
-                                                             inSection:indexPath.section];
-            UICollectionViewLayoutAttributes *attributes = [super layoutAttributesForItemAtIndexPath:lastIndexPath];
-            height = attributes.frame.origin.y + attributes.frame.size.height - (self.sectionInset.bottom);
+            //遍历一遍获取最高的item
+            CGFloat maxHeight = 0.0f;
+            CGFloat attrBottom = 0.0f;
+            for (int i =0;i<fields.count; i++){
+                NSIndexPath *searchIndexPath = [NSIndexPath indexPathForItem:i
+                                                                   inSection:indexPath.section];
+                UICollectionViewLayoutAttributes *attributes = [[super layoutAttributesForItemAtIndexPath:searchIndexPath] copy];
+                attrBottom = attributes.frame.origin.y + attributes.frame.size.height;
+                if(attrBottom > maxHeight){
+                    maxHeight = attrBottom;
+                }
+            }
+            height = maxHeight - (self.sectionInset.bottom);
+            
+//            //现在取的是最后一个item  应该取最后一行最高的item
+//            NSIndexPath *lastIndexPath = [NSIndexPath indexPathForItem:fields.count - 1
+//                                                             inSection:indexPath.section];
+//            UICollectionViewLayoutAttributes *attributes = [super layoutAttributesForItemAtIndexPath:lastIndexPath];
+//            height = attributes.frame.origin.y + attributes.frame.size.height - (self.sectionInset.bottom);
         }
 
         if (indexPath.section > 0 && height > 0) {
