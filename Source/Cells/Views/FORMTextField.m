@@ -135,15 +135,16 @@ static NSString * const FORMTextFieldPlusButtonColorKey = @"plus_button_color";
 }
 
 - (void)setRawText:(NSString *)rawText {
-    BOOL shouldFormat = (self.formatter && (rawText.length >= _rawText.length ||
-                                            ![rawText isEqualToString:_rawText]));
+    if(!self.isActive){
+        BOOL shouldFormat = (self.formatter && (rawText.length >= _rawText.length ||
+                                                ![rawText isEqualToString:_rawText]));
 
-    if (shouldFormat) {
-        self.text = [self.formatter formatString:rawText reverse:NO];
-    } else {
-        self.text = rawText;
+        if (shouldFormat) {
+            self.text = [self.formatter formatString:rawText reverse:NO];
+        } else {
+            self.text = rawText;
+        }
     }
-
     _rawText = rawText;
 }
 
